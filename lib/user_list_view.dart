@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:xampp/api_config.dart';
+import 'package:xampp/user_detail.dart';
 
 class UserListPage extends StatefulWidget {
   const UserListPage({super.key});
@@ -18,7 +19,6 @@ class _UserListPageState extends State<UserListPage> {
     var response = await http.get(Uri.parse(ApiConfig.getUsersUrl));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data["users"]);
       setState(() {
         listUsers.addAll(data['users']);
       });
@@ -47,6 +47,14 @@ class _UserListPageState extends State<UserListPage> {
               title: Text('${user['nom']} ${user['prenom']}'),
               leading: Icon(Icons.person),
               subtitle: Text(user['mail']),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserDetailPage(user: user),
+                  ),
+                );
+              },
             ),
           );
         },
